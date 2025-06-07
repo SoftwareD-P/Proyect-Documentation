@@ -11,18 +11,18 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
         # Software System (MecanicHub)
         monitoringSystem = softwareSystem "Vehicle Monitoring System in Mechanical Repair Shops" "It allows vehicle owners to monitor the status of their vehicle and communicate with the workshop." {
             tags "Monitoring System"
-
+        
         # Containers
-        mobileApplication = container "Mobile App" "Permite a los usuarios visualizar un dashboard con el resumen de toda la información del traslado de los lotes de vacunas." "Swift UI" "mobile" {
+        mobileApplication = container "Mobile App" "Allows monitoring of the user's vehicle and constant communication with the workshop" "Flutter" "mobile" {
             tags "Mobile Browser"
         }
-        webApplication = container "Web App" "Permite a los usuarios visualizar un dashboard con el resumen de toda la información del traslado de los lotes de vacunas." "React" "web" {
+        webApplication = container "Web App" "Allows monitoring of the user's vehicle and constant communication with the workshop" "Vue.js" "web" {
             tags "Web Browser"
         }
-        landingPage = container "Landing Page" "" "React" "landing" {
+        landingPage = container "Landing Page" "Allows the user to be informed about the services offered by MecanicHub" "Vue.js" "landing" {
             tags "Landing"
         }
-        apiRest = container "API REST" "API REST" "NodeJS (NestJS) port 8080" "apirest" {
+        apiRest = container "API REST" "Provides access to vehicle monitoring data and communication endpoints" "Java and Spring Boot" "apirest" {
             tags "API"
             
             # General
@@ -140,7 +140,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             
         }
         
-        database = container "DB" "" "MySQL Server RDS AWS" "database" {
+        database = container "DB" "Store user registration information, authentication credentials, access logs, etc." "MySQL Server RDS AWS" "database" {
             tags "Database"
         }
         
@@ -180,17 +180,22 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     monitoringSystem -> SunarpDatabase "Validate vehicle ownership using SUNARP Database"
 
     # Relationships between containers
-    vehicle_owner -> mobileApplication "Consulta"
-    vehicle_owner -> landingPage "Consulta"
-    vehicle_owner -> webApplication "Consulta"
-    workshop_admin -> mobileApplication "Consulta"
-    workshop_admin -> landingPage "Consulta"
-    workshop_admin -> webApplication "Consulta"
-    
+    vehicle_owner -> mobileApplication "Uses"
+    vehicle_owner -> landingPage "Uses"
+    vehicle_owner -> webApplication "Uses" "HTTPS"
+    workshop_admin -> mobileApplication "Uses"
+    workshop_admin -> landingPage "Uses"
+    workshop_admin -> webApplication "Uses" "HTTPS"
+
     mobileApplication -> apiRest "API Request" "JSON/HTTPS"
     webApplication -> apiRest "API Request" "JSON/HTTPS"
-    apiRest -> database
+    apiRest -> database "Read from and write to" "MySQL"
     apiRest -> GoogleMaps "API Request" "JSON/HTTPS"
+    apiRest -> EmailSystem "API Request" "JSON/HTTPS"
+    apiRest -> OAuthProvider "API Request" "JSON/HTTPS"
+    apiRest -> PaymentSystem "API Request" "JSON/HTTPS"
+    apiRest -> SunatDatabase "API Request" "JSON/HTTPS"
+    apiRest -> SunarpDatabase "API Request" "JSON/HTTPS"
 
     # Component-level relationships (within API Application)
     # General
@@ -258,12 +263,12 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     }
 
     views {
-        systemContext monitoringSystem "SystemContext" "Diagrama de Contexto" {
+    systemContext monitoringSystem "SystemContext" "Diagrama de Contexto" {
         include *
         autoLayout tb
     }
 
-    container monitoringSystem "Containers" "Monitoreo del Traslado Aéreo de Vacunas SARS-CoV-2" {
+    container monitoringSystem "Containers-Vertical" "Diagrama de Contenedores" {
         include *
         autoLayout tb
     }
@@ -319,48 +324,64 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
 
     styles {
         element "Workshop Admin" {
-        shape "Person"
-        background "#293241"
-        color "#ffffff"
+            shape "Person"
+            background "#293241"
+            color "#ffffff"
         }
         element "Vehicle Owner" {
-        shape "Person"
-        background "#ee6c4d"
-        color "#ffffff"
+            shape "Person"
+            background "#ee6c4d"
+            color "#ffffff"
         }
         element "Monitoring System" {
-        background "#008f39"
-        color "#ffffff"
+            background "#3d5a80"
+            color "#ffffff"
         }
-         element "Google Maps" {
-        background "#90714c"
-        color "#ffffff"
+        element "Google Maps" {
+            background "#90714c"
+            color "#ffffff"
         }
-         element "Aircraft System" {
-        background "#2f95c7"
-        color "#ffffff"
+        element "Email System" {
+            background "#0E46D3"
+            color "#ffffff"
+        }
+        element "OAuth Provider" {
+            background "#21A4D8"
+            color "#ffffff"
+        }
+        element "Payment System" {
+            background "#308E20"
+            color "#ffffff"
+        }
+        element "Sunat System" {
+            background "#BE4027"
+            color "#ffffff"
+        }
+        element "Sunarp System" {
+            background "#CAC527"
+            color "#ffffff"
         }
         element "Mobile Browser" {
-        background "#9d33d6"
-        color "#ffffff"
+            background "#63caf8"
+            color "#ffffff"
         }
         element "Web Browser" {
-        shape "WebBrowser"
-        background "#9d33d6"
-        color "#ffffff"
+            shape "WebBrowser"
+            background "#47ba87"
+            color "#ffffff"
         }
         element "Landing" {
-        background "#929000"
-        color "#ffffff"
+            background "#3a4f63"
+            color "#ffffff"
         }
         element "API" {
-        background "#0000ff"
-        color "#ffffff"
+            background "#72b545"
+            color "#ffffff"
         }
         element "Database" {
-        shape "Cylinder"
-        background "#ff0000"
-        color "#ffffff"
+            shape "Cylinder"
+            background "#086690"
+            color "#ffffff"
         }
         element "Component" {
             shape component
