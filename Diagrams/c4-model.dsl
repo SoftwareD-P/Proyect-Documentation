@@ -26,19 +26,19 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             tags "API"
             
             # General
-            flights = component "Flights" "" "NodeJS(NestJS)" {
+            appointments = component "Appointments" "" "NodeJS(NestJS)" {
                 tags "All"
             }
-            airports = component "Airports" "" "NodeJS(NestJS)" {
-                tags "All"
-            }
-            aircrafts = component "Aircrafts" "" "NodeJS(NestJS)" {
+            workshops = component "Workshops" "" "NodeJS(NestJS)" {
                 tags "All"
             }
             security = component "Security" "" "NodeJS(NestJS)" {
                 tags "All"
             }
-            vaccines = component "Vaccines" "" "NodeJS(NestJS)" {
+            authentication = component "Authentication" "" "NodeJS(NestJS)" {
+                tags "All"
+            }
+            payments = component "Payments" "" "NodeJS(NestJS)" {
                 tags "All"
             }
             monitoring = component "Monitoring" "" "NodeJS(NestJS)" {
@@ -47,49 +47,35 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             sharedKernel = component "Shared Kernel" "" "NodeJS(NestJS)" {
                 tags "All"
             }
-            
-            # Flights BC
-            flightInterface = component "Interface Layer Flights" "" "NodeJS(NestJS)" {
-                tags "FlightsBC"
+
+            # Appointments BC
+            appointmentsInterface = component "Interface Layer Appointments" "" "NodeJS(NestJS)" {
+                tags "AppointmentsBC"
             }
-            flightApplication = component "Application Layer Flights" "" "NodeJS(NestJS)" {
-                tags "FlightsBC"
+            appointmentsApplication = component "Application Layer Appointments" "" "NodeJS(NestJS)" {
+                tags "AppointmentsBC"
             }
-            flightInfrastructure = component "Infrastructure Layer Flights" "" "NodeJS(NestJS)" {
-                tags "FlightsBC"
+            appointmentsInfrastructure = component "Infrastructure Layer Appointments" "" "NodeJS(NestJS)" {
+                tags "AppointmentsBC"
             }
-            flightDomain = component "Domain Layer Flights" "" "NodeJS(NestJS)" {
-                tags "FlightsBC"
+            appointmentsDomain = component "Domain Layer Appointments" "" "NodeJS(NestJS)" {
+                tags "AppointmentsBC"
             }
-            
-            # Aircrafts BC
-            aircraftsInterface = component "Interface Layer Aircrafts" "" "NodeJS(NestJS)" {
-                tags "AircraftsBC"
+
+            # Workshops BC
+            workshopsInterface = component "Interface Layer Workshops" "" "NodeJS(NestJS)" {
+                tags "WorkshopsBC"
             }
-            aircraftsApplication = component "Application Layer Aircrafts" "" "NodeJS(NestJS)" {
-                tags "AircraftsBC"
+            workshopsApplication = component "Application Layer Workshops" "" "NodeJS(NestJS)" {
+                tags "WorkshopsBC"
             }
-            aircraftsInfrastructure = component "Infrastructure Layer Aircrafts" "" "NodeJS(NestJS)" {
-                tags "AircraftsBC"
+            workshopsInfrastructure = component "Infrastructure Layer Workshops" "" "NodeJS(NestJS)" {
+                tags "WorkshopsBC"
             }
-            aircraftsDomain = component "Domain Layer Aircrafts" "" "NodeJS(NestJS)" {
-                tags "AircraftsBC"
+            workshopsDomain = component "Domain Layer Workshops" "" "NodeJS(NestJS)" {
+                tags "WorkshopsBC"
             }
-            
-            # Airports BC
-            airportsInterface = component "Interface Layer Airports" "" "NodeJS(NestJS)" {
-                tags "AirportsBC"
-            }
-            airportsApplication = component "Application Layer Airports" "" "NodeJS(NestJS)" {
-                tags "AirportsBC"
-            }
-            airportsInfrastructure = component "Infrastructure Layer Airports" "" "NodeJS(NestJS)" {
-                tags "AirportsBC"
-            }
-            airportsDomain = component "Domain Layer Airports" "" "NodeJS(NestJS)" {
-                tags "AirportsBC"
-            }
-            
+
             # Security BC
             securityInterface = component "Interface Layer Security" "" "NodeJS(NestJS)" {
                 tags "SecurityBC"
@@ -107,20 +93,34 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
                 tags "SecurityBC"
             }
             
-            # Vaccines BC
-            vaccinesInterface = component "Interface Layer Vaccines" "" "NodeJS(NestJS)" {
-                tags "VaccinesBC"
+            # Authentication BC
+            authenticationInterface = component "Interface Layer Authentication" "" "NodeJS(NestJS)" {
+                tags "AuthenticationBC"
             }
-            vaccinesApplication = component "Application Layer Vaccines" "" "NodeJS(NestJS)" {
-                tags "VaccinesBC"
+            authenticationApplication = component "Application Layer Authentication" "" "NodeJS(NestJS)" {
+                tags "AuthenticationBC"
             }
-            vaccinesInfrastructure = component "Infrastructure Layer Vaccines" "" "NodeJS(NestJS)" {
-                tags "VaccinesBC"
+            authenticationInfrastructure = component "Infrastructure Layer Authentication" "" "NodeJS(NestJS)" {
+                tags "AuthenticationBC"
             }
-            vaccinesDomain = component "Domain Layer Vaccines" "" "NodeJS(NestJS)" {
-                tags "VaccinesBC"
+            authenticationDomain = component "Domain Layer Authentication" "" "NodeJS(NestJS)" {
+                tags "AuthenticationBC"
             }
-            
+
+            # Payments BC
+            paymentsInterface = component "Interface Layer Payments" "" "NodeJS(NestJS)" {
+                tags "PaymentsBC"
+            }
+            paymentsApplication = component "Application Layer Payments" "" "NodeJS(NestJS)" {
+                tags "PaymentsBC"
+            }
+            paymentsInfrastructure = component "Infrastructure Layer Payments" "" "NodeJS(NestJS)" {
+                tags "PaymentsBC"
+            }
+            paymentsDomain = component "Domain Layer Payments" "" "NodeJS(NestJS)" {
+                tags "PaymentsBC"
+            }
+
             # Monitoring BC
             monitoringInterface = component "Interface Layer Monitoring" "" "NodeJS(NestJS)" {
                 tags "MonitoringBC"
@@ -199,58 +199,67 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
 
     # Component-level relationships (within API Application)
     # General
-    flights -> sharedKernel "Usa"
-    airports -> sharedKernel "Usa"
-    aircrafts -> sharedKernel "Usa"
+    appointments -> sharedKernel "Usa"
+    workshops -> sharedKernel "Usa"
     security -> sharedKernel "Usa"
-    vaccines -> sharedKernel "Usa"
+    authentication -> sharedKernel "Usa"
+    payments -> sharedKernel "Usa"
     monitoring -> sharedKernel "Usa"
     
-    flights -> database "Usa"
-    airports -> database "Usa"
-    aircrafts -> database "Usa"
+    appointments -> database "Usa"
+    workshops -> database "Usa"
     security -> database "Usa"
-    vaccines -> database "Usa"
+    authentication -> database "Usa"
+    payments -> database "Usa"
     monitoring -> database "Usa"
     
-    monitoring -> GoogleMaps "Usa"
+    appointments -> GoogleMaps "Usa"
+    workshops -> SunarpDatabase "Usa"
+    workshops -> SunatDatabase "Usa"
+    authentication -> OAuthProvider "Usa"
+    payments -> PaymentSystem "Usa"
+    monitoring -> EmailSystem "Usa" 
     
-    # Flights
-    flightInterface -> flightApplication
-    flightApplication -> flightDomain 
-    flightApplication -> flightInfrastructure
-    flightInfrastructure -> flightDomain
-    flightInfrastructure -> database "Usa"
-    
-    # Aircrafts
-    aircraftsInterface -> aircraftsApplication
-    aircraftsApplication -> aircraftsDomain 
-    aircraftsApplication -> aircraftsInfrastructure
-    aircraftsInfrastructure -> aircraftsDomain
-    aircraftsInfrastructure -> database "Usa"
-    
-    # Airports
-    airportsInterface -> airportsApplication
-    airportsApplication -> airportsDomain 
-    airportsApplication -> airportsInfrastructure
-    airportsInfrastructure -> airportsDomain
-    airportsInfrastructure -> database "Usa"
-    
-    # Security
+    # appointments
+    appointmentsInterface -> appointmentsApplication
+    appointmentsApplication -> appointmentsDomain 
+    appointmentsApplication -> appointmentsInfrastructure
+    appointmentsInfrastructure -> appointmentsDomain
+    appointmentsInfrastructure -> database "Usa"
+
+    # workshops
+    workshopsInterface -> workshopsApplication
+    workshopsApplication -> workshopsDomain 
+    workshopsApplication -> workshopsInfrastructure
+    workshopsInfrastructure -> workshopsDomain
+    workshopsInfrastructure -> database "Usa"
+    workshopsInfrastructure -> SunarpDatabase "Usa"
+    workshopsInfrastructure -> SunatDatabase "Usa"
+
+    # security
     securityInterface -> securityApplication
     securityApplication -> securityDomain 
     securityApplication -> securityInfrastructure
     securityInfrastructure -> securityDomain
     securityInfrastructure -> securityComponent
     securityInfrastructure -> database "Usa"
+
+    # authentication
+    authenticationInterface -> authenticationApplication
+    authenticationApplication -> authenticationDomain 
+    authenticationApplication -> authenticationInfrastructure
+    authenticationInfrastructure -> authenticationDomain
+    authenticationInfrastructure -> database "Usa"
+    authenticationInfrastructure -> OAuthProvider "Usa"
     
-    # Vaccines
-    vaccinesInterface -> vaccinesApplication
-    vaccinesApplication -> vaccinesDomain 
-    vaccinesApplication -> vaccinesInfrastructure
-    vaccinesInfrastructure -> vaccinesDomain
-    vaccinesInfrastructure -> database "Usa"
-    
+    # Payments
+    paymentsInterface -> paymentsApplication
+    paymentsApplication -> paymentsDomain 
+    paymentsApplication -> paymentsInfrastructure
+    paymentsInfrastructure -> paymentsDomain
+    paymentsInfrastructure -> database "Usa"
+    paymentsInfrastructure -> PaymentSystem "Usa"
+
     # Monitoring
     monitoringInterface -> monitoringApplication
     monitoringApplication -> monitoringDomain 
@@ -259,6 +268,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     monitoringInfrastructure -> monitoringConnector
     monitoringConnector -> GoogleMaps "[JSON/HTTPS]"
     monitoringInfrastructure -> database "Usa"
+    monitoringInfrastructure -> EmailSystem "Usa"
     
     }
 
@@ -275,49 +285,49 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
 
     component apiRest "Components" "API Rest Component Diagram" {
         include "element.tag==All"
-        include database GoogleMaps
+        include database GoogleMaps EmailSystem OAuthProvider PaymentSystem SunatDatabase SunarpDatabase
         autoLayout tb
         title "API Rest Component Diagram"
     }
-    
-    component apiRest "AircraftsBC" "Aircrafts BC Component Diagram" {
-        include "element.tag==AircraftsBC"
+
+    component apiRest "Appointments" "Appointments BC Component Diagram" {
+        include "element.tag==AppointmentsBC"
         include database
         autoLayout tb
-        title "Aircraft BC Component Diagram"
+        title "Appointments BC Component Diagram"
     }
-    
-    component apiRest "FlightsBC" "Flights BC Component Diagram" {
-        include "element.tag==FlightsBC"
-        include database
+
+    component apiRest "WorkshopsBC" "Workshops BC Component Diagram" {
+        include "element.tag==WorkshopsBC"
+        include database SunarpDatabase SunatDatabase
         autoLayout tb
-        title "Flights BC Component Diagram"
+        title "Workshops BC Component Diagram"
     }
-    
-    component apiRest "AirportsBC" "Airports BC Component Diagram" {
-        include "element.tag==AirportsBC"
-        include database
+
+    component apiRest "AuthenticationBC" "Authentication BC Component Diagram" {
+        include "element.tag==AuthenticationBC"
+        include database OAuthProvider
         autoLayout tb
-        title "Airports BC Component Diagram"
+        title "Authentication BC Component Diagram"
     }
     
     component apiRest "SecurityBC" "Security BC Component Diagram" {
         include "element.tag==SecurityBC"
-        include database
+        include database 
         autoLayout tb
         title "Security BC Component Diagram"
     }
-    
-    component apiRest "VaccinesBC" "Vaccines BC Component Diagram" {
-        include "element.tag==VaccinesBC"
-        include database
+
+    component apiRest "PaymentsBC" "Payments BC Component Diagram" {
+        include "element.tag==PaymentsBC"
+        include database PaymentSystem
         autoLayout tb
-        title "Vaccines BC Component Diagram"
+        title "Payments BC Component Diagram"
     }
     
     component apiRest "MonitoringBC" "Monitoring BC Component Diagram" {
         include "element.tag==MonitoringBC"
-        include database GoogleMaps
+        include database GoogleMaps EmailSystem
         autoLayout tb
         title "Monitoring BC Component Diagram"
     }
