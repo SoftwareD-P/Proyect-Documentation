@@ -32,7 +32,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             workshops = component "Workshops" "" "NodeJS(NestJS)" {
                 tags "All"
             }
-            security = component "Security" "" "NodeJS(NestJS)" {
+            notification = component "Notification" "" "NodeJS(NestJS)" {
                 tags "All"
             }
             authentication = component "Authentication" "" "NodeJS(NestJS)" {
@@ -76,23 +76,23 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
                 tags "WorkshopsBC"
             }
 
-            # Security BC
-            securityInterface = component "Interface Layer Security" "" "NodeJS(NestJS)" {
-                tags "SecurityBC"
+            # Notification BC
+            notificationInterface = component "Interface Layer Notification" "" "NodeJS(NestJS)" {
+                tags "NotificationBC"
             }
-            securityApplication = component "Application Layer Security" "" "NodeJS(NestJS)" {
-                tags "SecurityBC"
+            notificationApplication = component "Application Layer Notification" "" "NodeJS(NestJS)" {
+                tags "NotificationBC"
             }
-            securityInfrastructure = component "Infrastructure Layer Security" "" "NodeJS(NestJS)" {
-                tags "SecurityBC"
+            notificationInfrastructure = component "Infrastructure Layer Notification" "" "NodeJS(NestJS)" {
+                tags "NotificationBC"
             }
-            securityDomain = component "Domain Layer Security" "" "NodeJS(NestJS)" {
-                tags "SecurityBC"
+            notificationDomain = component "Domain Layer Notification" "" "NodeJS(NestJS)" {
+                tags "NotificationBC"
             }
-            securityComponent = component "Security Component" "" "NodeJS(NestJS)" {
-                tags "SecurityBC"
+            notificationComponent = component "Notification Component" "" "NodeJS(NestJS)" {
+                tags "NotificationBC"
             }
-            
+
             # Authentication BC
             authenticationInterface = component "Interface Layer Authentication" "" "NodeJS(NestJS)" {
                 tags "AuthenticationBC"
@@ -201,14 +201,14 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     # General
     appointments -> sharedKernel "Usa"
     workshops -> sharedKernel "Usa"
-    security -> sharedKernel "Usa"
+    notification -> sharedKernel "Usa"
     authentication -> sharedKernel "Usa"
     payments -> sharedKernel "Usa"
     monitoring -> sharedKernel "Usa"
     
     appointments -> database "Usa"
     workshops -> database "Usa"
-    security -> database "Usa"
+    notification -> database "Usa"
     authentication -> database "Usa"
     payments -> database "Usa"
     monitoring -> database "Usa"
@@ -218,7 +218,8 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     workshops -> SunatDatabase "Usa"
     authentication -> OAuthProvider "Usa"
     payments -> PaymentSystem "Usa"
-    monitoring -> EmailSystem "Usa" 
+    monitoring -> EmailSystem "Usa"
+    notification -> EmailSystem "Usa"
     
     # appointments
     appointmentsInterface -> appointmentsApplication
@@ -236,13 +237,14 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     workshopsInfrastructure -> SunarpDatabase "Usa"
     workshopsInfrastructure -> SunatDatabase "Usa"
 
-    # security
-    securityInterface -> securityApplication
-    securityApplication -> securityDomain 
-    securityApplication -> securityInfrastructure
-    securityInfrastructure -> securityDomain
-    securityInfrastructure -> securityComponent
-    securityInfrastructure -> database "Usa"
+    # Notification
+    notificationInterface -> notificationApplication
+    notificationApplication -> notificationDomain 
+    notificationApplication -> notificationInfrastructure
+    notificationInfrastructure -> notificationDomain
+    notificationInfrastructure -> notificationComponent
+    notificationInfrastructure -> database "Usa"
+    notificationInfrastructure -> EmailSystem "Usa"
 
     # authentication
     authenticationInterface -> authenticationApplication
@@ -310,12 +312,12 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
         autoLayout tb
         title "Authentication BC Component Diagram"
     }
-    
-    component apiRest "SecurityBC" "Security BC Component Diagram" {
-        include "element.tag==SecurityBC"
-        include database 
+
+    component apiRest "NotificationBC" "Notification BC Component Diagram" {
+        include "element.tag==NotificationBC"
+        include database EmailSystem
         autoLayout tb
-        title "Security BC Component Diagram"
+        title "Notification BC Component Diagram"
     }
 
     component apiRest "PaymentsBC" "Payments BC Component Diagram" {
