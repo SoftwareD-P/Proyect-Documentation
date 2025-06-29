@@ -35,7 +35,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             notification = component "Notification" "" "NodeJS(NestJS)" {
                 tags "All"
             }
-            authentication = component "Authentication" "" "NodeJS(NestJS)" {
+            iam = component "Identity and Access Management" "" "NodeJS(NestJS)" {
                 tags "All"
             }
             payments = component "Payments" "" "NodeJS(NestJS)" {
@@ -93,18 +93,18 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
                 tags "NotificationBC"
             }
 
-            # Authentication BC
-            authenticationInterface = component "Interface Layer Authentication" "" "NodeJS(NestJS)" {
-                tags "AuthenticationBC"
+            # IAM BC
+            iamInterface = component "Interface Layer IAM" "" "NodeJS(NestJS)" {
+                tags "IAMBC"
             }
-            authenticationApplication = component "Application Layer Authentication" "" "NodeJS(NestJS)" {
-                tags "AuthenticationBC"
+            iamApplication = component "Application Layer IAM" "" "NodeJS(NestJS)" {
+                tags "IAMBC"
             }
-            authenticationInfrastructure = component "Infrastructure Layer Authentication" "" "NodeJS(NestJS)" {
-                tags "AuthenticationBC"
+            iamInfrastructure = component "Infrastructure Layer IAM" "" "NodeJS(NestJS)" {
+                tags "IAMBC"
             }
-            authenticationDomain = component "Domain Layer Authentication" "" "NodeJS(NestJS)" {
-                tags "AuthenticationBC"
+            iamDomain = component "Domain Layer IAM" "" "NodeJS(NestJS)" {
+                tags "IAMBC"
             }
 
             # Payments BC
@@ -140,7 +140,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             
         }
         
-        database = container "DB" "Store user registration information, authentication credentials, access logs, etc." "MySQL Server RDS AWS" "database" {
+        database = container "DB" "Store user registration information, iam credentials, access logs, etc." "MySQL Server RDS AWS" "database" {
             tags "Database"
         }
         
@@ -153,7 +153,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     EmailSystem = softwareSystem "Email System" "The internal Microsoft Exchange e-mail system" {
         tags "Email System"
     }
-    OAuthProvider = softwareSystem "OAuth Provider" "Authentication services such as Google or Facebook." {
+    OAuthProvider = softwareSystem "OAuth Provider" "IAM services such as Google or Facebook." {
         tags "OAuth Provider"
     }
     PaymentSystem = softwareSystem "Payment System" "Payment processing services" {
@@ -202,21 +202,21 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     appointments -> sharedKernel "Usa"
     workshops -> sharedKernel "Usa"
     notification -> sharedKernel "Usa"
-    authentication -> sharedKernel "Usa"
+    iam -> sharedKernel "Usa"
     payments -> sharedKernel "Usa"
     monitoring -> sharedKernel "Usa"
     
     appointments -> database "Usa"
     workshops -> database "Usa"
     notification -> database "Usa"
-    authentication -> database "Usa"
+    iam -> database "Usa"
     payments -> database "Usa"
     monitoring -> database "Usa"
     
     appointments -> GoogleMaps "Usa"
     workshops -> SunarpDatabase "Usa"
     workshops -> SunatDatabase "Usa"
-    authentication -> OAuthProvider "Usa"
+    iam -> OAuthProvider "Usa"
     payments -> PaymentSystem "Usa"
     monitoring -> EmailSystem "Usa"
     notification -> EmailSystem "Usa"
@@ -246,13 +246,13 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     notificationInfrastructure -> database "Usa"
     notificationInfrastructure -> EmailSystem "Usa"
 
-    # authentication
-    authenticationInterface -> authenticationApplication
-    authenticationApplication -> authenticationDomain 
-    authenticationApplication -> authenticationInfrastructure
-    authenticationInfrastructure -> authenticationDomain
-    authenticationInfrastructure -> database "Usa"
-    authenticationInfrastructure -> OAuthProvider "Usa"
+    # iam
+    iamInterface -> iamApplication
+    iamApplication -> iamDomain 
+    iamApplication -> iamInfrastructure
+    iamInfrastructure -> iamDomain
+    iamInfrastructure -> database "Usa"
+    iamInfrastructure -> OAuthProvider "Usa"
     
     # Payments
     paymentsInterface -> paymentsApplication
@@ -306,11 +306,11 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
         title "Workshops BC Component Diagram"
     }
 
-    component apiRest "AuthenticationBC" "Authentication BC Component Diagram" {
-        include "element.tag==AuthenticationBC"
+    component apiRest "IAMBC" "IAM BC Component Diagram" {
+        include "element.tag==IAMBC"
         include database OAuthProvider
         autoLayout tb
-        title "Authentication BC Component Diagram"
+        title "IAM BC Component Diagram"
     }
 
     component apiRest "NotificationBC" "Notification BC Component Diagram" {

@@ -1,7 +1,7 @@
-package pe.edu.upc.mecanichubplatform.application;
+package pe.edu.upc.mecanichubplatform.Appointment.application;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.mecanichubplatform.appointments.domain.model.aggregates.Appointment;
+import pe.edu.upc.mecanichubplatform.Appointment.domain.model.aggregates.Appointment;
 
 import java.time.LocalDateTime;
 import java.util.List;

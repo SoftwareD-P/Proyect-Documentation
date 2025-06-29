@@ -1,12 +1,12 @@
-package pe.edu.upc.mecanichubplatform.interfaces.rest;
+package pe.edu.upc.mecanichubplatform.Appointment.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pe.edu.upc.mecanichubplatform.application.AppointmentService;
-import pe.edu.upc.mecanichubplatform.appointments.domain.model.aggregates.*;
+import pe.edu.upc.mecanichubplatform.Appointment.application.AppointmentService;
+import pe.edu.upc.mecanichubplatform.Appointment.domain.model.aggregates.Appointment;
 
 import java.time.LocalDateTime;
 import java.util.List;

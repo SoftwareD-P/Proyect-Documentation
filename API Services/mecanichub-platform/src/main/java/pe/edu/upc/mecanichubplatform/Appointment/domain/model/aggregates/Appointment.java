@@ -1,4 +1,4 @@
-package pe.edu.upc.mecanichubplatform.appointments.domain.model.aggregates;
+package pe.edu.upc.mecanichubplatform.Appointment.domain.model.aggregates;
 
 import lombok.Getter;
 import lombok.Setter;
