@@ -1,0 +1,100 @@
+@startuml Notifications Bounded Context
+
+abstract class Notification <<Entity>> {
+    - id: Long
+    --
+    - message: String
+    - date: LocalDateTime
+    - recipients: List<User>
+    --
+    + abstract send(message: String): void
+  }
+  class InAppNotification <<Entity>> extends Notification {
+    --
+    + send(message: String): void
+  }
+  class EmailNotification <<Entity>> extends Notification {
+    - email: String
+    --
+    + send(message: String): void
+  }
+  class SMSNotification <<Entity>> extends Notification {
+    - phoneNumber: String
+    --
+    + send(message: String): void
+  }
+  abstract class NotificationFactory <<Factory>> {
+    + sendNotification(message: String): void
+    + abstract createNotification(): Notification
+  }
+  class InAppNotificationFactory <<Factory>> extends NotificationFactory {
+    + createNotification(): InAppNotification
+  }
+  class EmailNotificationFactory <<Factory>> extends NotificationFactory {
+    + createNotification(): EmailNotification
+  }
+  class SMSNotificationFactory <<Factory>> extends NotificationFactory {
+    + createNotification(): SMSNotification
+  }
+  class NotificationService <<Service>> {
+    + public static NotificationFactory getNotificationFactory(): NotificationFactory
+  }
+  class ChatSession <<Entity>> {
+    - id: Long
+    --
+    - vehicle: Vehicle
+    - workshop: Workshop
+    - messages: List<Message>
+    --
+    + sendMessage(sender: User, message: Message): void
+    + attachFile(sender: User, file: MediaAttachment): void
+    + getReceiver(sender: User): User
+  }
+  class Message <<Value Object>>{
+    - id: Long
+    --
+    - sender: User
+    - content: String
+    - timestamp: LocalDateTime
+    - attachments: List<MediaAttachment>
+    --
+    + getContent(): String
+    + isSender(user: User): boolean
+  }
+  class MediaAttachment <<Value Object>>{
+    - id: Long
+    --
+    - fileName: String
+    - mediaType: MediaType
+    --
+    + getFileName(): String
+    + getMediaType(): MediaType
+  }
+  class Image <<Value Object>> extends MediaAttachment {
+    - resolution: String
+    --
+    + getResolution(): String
+  }
+  class Video <<Value Object>> extends MediaAttachment {
+    - duration: String
+    --
+    + getDuration(): String
+  }
+  class Document <<Value Object>> extends MediaAttachment {
+    - fileSize: Long
+    --
+    + getFileSize(): Long
+  }
+'Notification <|-- InAppNotification
+'Notification <|-- EmailNotification
+'Notification <|-- SMSNotification
+
+NotificationService .down.> NotificationFactory
+EmailNotificationFactory .up.> EmailNotification
+SMSNotificationFactory .up.> SMSNotification
+InAppNotificationFactory .up.> InAppNotification
+ChatSession "1" -left-> "0..*" Message
+Message "1" -down-> "0..*" MediaAttachment
+ChatSession -right-> NotificationService
+
+@enduml

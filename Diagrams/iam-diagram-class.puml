@@ -1,0 +1,103 @@
+@startuml IAM Bounded Context
+
+ class User {
+    - id: Long
+    --
+    - username: String
+    - password: String
+    - role: UserRole
+    - isActive: boolean
+    - lastLogin: LocalDateTime
+    - authenticator: Authenticator
+    - role: Role
+    --
+    + changePassword(oldPassword: String, newPassword: String): void
+    + setStrategy(authenticator: Authenticator): void
+  }
+  class Access {
+    - id: Long
+    --
+    - type: AccessCommand
+    --
+    + isType(type: AccessCommand): boolean
+  }
+  class AccessLog {
+    - id: Long
+    --
+    - date: LocalDateTime
+    - result: AccessResult
+    - user: User
+    - access: Access
+    --
+    + wasSuccessful(): boolean
+  }
+  interface Authenticator <<Interface>> {
+    + authenticate(username: String, password: String): boolean
+  }
+
+  class LocalAuthenticator <<Strategy>> implements Authenticator {
+    + authenticate(username: String, password: String): boolean
+  }
+  class GoogleAuthenticator <<Strategy>> implements Authenticator {
+    + authenticate(username: String, password: String): boolean
+  }
+  class FacebookAuthenticator <<Strategy>> implements Authenticator {
+    + authenticate(username: String, password: String): boolean
+  }
+
+  interface Role <<Interface>> {
+    + getPermissions(): List<AccessCommand>
+  }
+
+  class WorkshopManagerRole <<Entity>> implements Role {
+    + getPermissions(): List<AccessCommand> 
+  }
+  class VehicleOwnerRole <<Entity>> implements Role {
+    + getPermissions(): List<AccessCommand>
+  }
+  class MechanicRole <<Entity>> implements Role {
+    + getPermissions(): List<AccessCommand>
+  }
+  class TechnicianRole <<Entity>> implements Role {
+    + getPermissions(): List<AccessCommand>
+  }
+
+  interface AccessCommand <<Entity>> {
+    + execute(user: User): AccessLog
+  }
+  class Login <<Entity>> implements AccessCommand {
+    + execute(user: User): AccessLog
+  }
+  class WorkshopSearch <<Entity>> implements AccessCommand {
+    + execute(user: User): AccessLog
+  }
+  class AppointmentBook <<Entity>> implements AccessCommand {
+    + execute(user: User): AccessLog
+  }
+  class ServiceRequest <<Entity>> implements AccessCommand {
+    + execute(user: User): AccessLog
+  }
+  class VehicleTrack <<Entity>> implements AccessCommand {
+    + execute(user: User): AccessLog
+  }
+  abstract class AccessResult <<ValueObject>> {
+    - result: AccessResult
+    --
+    + isSuccess(): boolean
+  }
+  class SuccessResult <<ValueObject>> extends AccessResult {
+    + isSuccess(): boolean
+  }
+  class FailureResult <<ValueObject>> extends AccessResult {
+    + isSuccess(): boolean
+  }
+
+User "1..*" -- "*" Access
+AccessLog .right.> AccessResult
+(User, Access) .> AccessLog
+User o-right-> Authenticator
+User o-down-> Role
+Access o-down-> AccessCommand
+
+
+@enduml

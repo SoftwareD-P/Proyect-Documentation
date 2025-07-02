@@ -1,0 +1,93 @@
+@startuml Workshop Bounded Context
+
+class Workshop <<Entity>> {
+  - id: Long
+  --
+  - name: String
+  - description: String
+  - RUC: String
+  - address: String
+  - phone: String
+  - email: String
+  - schedule: WeeklySchedule
+  - location: String
+  - manager: WorkshopManager
+  - workers: List<Worker>
+  - promotions: List<Promotion>
+  - services: List<Service>
+  - statistics: List<Statistics>
+  --
+  + getDetails(): String
+  + editProfile(name: String, address: String, phone: String, email: String): void
+  + generateReport(startDate: LocalDateTime, endDate: LocalDateTime): Report
+  + listAvailableServices(): List<Service>
+  + acceptAppointment(appointment: Appointment): void
+  + rejectAppointment(appointment: Appointment): void
+  + createRepairOrder(appointment: Appointment): void
+}
+
+abstract class ServiceFactory <<Factory>> {
+  + createService(): Service
+}
+
+class RepairServiceFactory <<Factory>> extends ServiceFactory  {
+  + createService(): Service
+}
+class MaintenanceServiceFactory <<Factory>> extends ServiceFactory {
+  + createService(): Service
+}
+interface Service <<Interface>> {
+  + displayInformation(): String
+  + getPrice(): double
+}
+class RepairService <<Entity>> implements Service {
+  + displayInformation(): String
+  + getPrice(): double
+}
+class MaintenanceService <<Entity>> implements Service {
+  + displayInformation(): String
+  + getPrice(): double
+}
+class BasicService <<Entity>> implements Service {
+  - name: String
+  - description: String
+  - price: double
+  --
+  + displayInformation(): String
+  + getPrice(): double
+}
+class ServicePackage <<Entity>> implements Service {
+  - name: String
+  - services: List<Service>
+  --
+  + add(service: Service): void
+  + remove(service: Service): void
+  + getServices(): List<Service>
+  + displayInformation(): String
+  + getPrice(): double
+}
+
+class WeeklySchedule <<Entity>> {
+  - id: Long
+  --
+  - openingTime: LocalTime
+  - closingTime: LocalTime
+  - workingDays: List<String>
+  --
+  + getSchedule(): Map<String, String>
+}
+
+Workshop "1" -down-> "1..*" Service
+Workshop -right-> ServiceFactory
+Workshop "1" -left-> "1" WeeklySchedule
+'ServiceFactory <|.. RepairServiceFactory
+'ServiceFactory <|.. MaintenanceFactory
+RepairServiceFactory .up.> RepairService
+MaintenanceServiceFactory .up.> MaintenanceService
+'Service <|.. BasicService
+'Service <|.. ServicePackage
+'Service <|.. RepairService
+'Service <|.. MaintenanceService
+Service <--* ServicePackage
+
+@enduml

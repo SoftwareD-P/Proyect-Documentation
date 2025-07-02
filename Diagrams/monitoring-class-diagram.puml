@@ -1,0 +1,60 @@
+@startuml Monitoring Bounded Context
+
+class VehicleTrackingFacade <<Facade>> {
+  - statusService: VehicleStatusService
+  - NotificationService: NotificationService
+  - historyService: VehicleHistoryService
+  -- 
+  + updateVehicleStatus(vehicleId: Long, newState: VehicleState): void
+  + getVehicleStatus(vehicleId: Long): VehicleState
+}
+class VehicleStatusService <<Service>> {
+  - state: VehicleState
+  --
+  + updateStatus(vehicleId: Long, status: VehicleState): void
+  + notifyObservers(): void
+}
+class VehicleHistoryService <<Service>> {
+  + logStatusChange(vehicleId: Long, status: VehicleState): void
+}
+abstract class VehicleState <<State>> {
+  + State(vehicleId: Long, service: VehicleStatusService): void
+}
+class PendingState <<State>> extends VehicleState  {
+  + getState(): String
+}
+class InServiceState <<State>> extends VehicleState {
+  + getState(): String
+}
+class ReadyForPickupState <<State>> extends VehicleState{
+  + getState(): String
+}
+class DeliveredState <<State>> extends VehicleState {
+  + getState(): String
+}
+interface VehicleObserver <<Observer>> {
+  + updateNotification(vehicleId: Long, status: VehicleState): void
+}
+class WorkShopDashboard <<Observer>> implements VehicleObserver {
+  + updateNotification(vehicleId: Long, status: VehicleState): void
+}
+class CustomerDashboard <<Observer>> implements VehicleObserver {
+  + updateNotification(vehicleId: Long, status: VehicleState): void
+}
+class NotificationStateService <<Observer>> implements VehicleObserver  {
+  + updateNotification(vehicleId: Long, status: VehicleState): void
+  + notifyCustomer(vehicleId: Long, status: VehicleState): void
+}
+
+VehicleTrackingFacade -up-> VehicleStatusService
+VehicleTrackingFacade -down-> NotificationStateService
+VehicleTrackingFacade -down-> VehicleHistoryService
+'VehicleStatus <|-- PendingState
+'VehicleStatus <|-- InServiceState
+'VehicleStatus <|-- ReadyForPickupState
+'VehicleStatus <|-- DeliveredState
+VehicleStatusService <-- VehicleState
+VehicleStatusService o--> VehicleState
+VehicleStatusService --> VehicleObserver
+
+@enduml

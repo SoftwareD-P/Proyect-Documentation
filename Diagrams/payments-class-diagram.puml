@@ -1,0 +1,70 @@
+@startuml Paymentes Bounded Context
+
+class Payment <<Entity>> {
+    - id: Long
+    --
+    - amount: double
+    - date: LocalDateTime
+    - state: PaymentState
+    - method: PaymentMethod
+    - user: User
+  
+    --
+    + processPayment(): boolean
+    + confirmPayment(): void
+    + cancelPayment(): void
+    + getDetails(): String
+  }
+  interface PaymentMethod <<Interface>> {
+    + processPayment(amount: double): boolean
+    + getMethodName(): String
+  }
+  class PayPal <<Entity>> implements PaymentMethod {
+    - email: String
+    --
+    + processPayment(amount: double): boolean
+    + getMethodName(): String
+  }
+  class CreditCard <<Entity>> implements PaymentMethod {
+    - cardNumber: String
+    - cardHolderName: String
+    - expirationDate: LocalDateTime
+    - cvv: String
+    --
+    + processPayment(amount: double): boolean
+    + getMethodName(): String
+  }
+  class YapePlin <<Entity>> implements PaymentMethod {
+    - phoneNumber: String
+    --
+    + processPayment(amount: double): boolean
+    + getMethodName(): String
+  }
+  abstract class PaymentState <<Abstract>> {
+    + confirm(payment: Payment): void
+    + cancel(payment: Payment): void
+    + getStatus(): String
+  }
+  class PendingState <<Entity>> extends PaymentState {
+    + confirm(payment: Payment): void
+    + cancel(payment: Payment): void
+    + getStatus(): String
+  }
+  class CompletedState <<Entity>> extends PaymentState {
+    + confirm(payment: Payment): void
+    + getStatus(): String
+  }
+  class CancelledState <<Entity>> extends PaymentState {
+    + cancel(payment: Payment): void
+    + getStatus(): String
+  }
+
+
+'PaymentMethod <|.. PayPal
+'PaymentMethod <|.. CreditCard
+'PaymentMethod <|.. YapePlin
+Payment -down-> PaymentMethod
+PaymentState -> Payment
+Payment o-> PaymentState
+
+@enduml

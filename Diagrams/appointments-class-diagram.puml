@@ -1,0 +1,80 @@
+@startuml Appointments Bounded Context
+
+class Appointment <<Entity>> {
+  - id: Long
+  --
+  - client: VehicleOwner
+  - service: Service
+  - workshop: Workshop
+  - status: AppointmentStatus
+  - assignedWorker: Worker
+  - date: LocalDateTime
+  --
+  + getDetails(): String
+  + cancel(): void
+  + reschedule(newDate: LocalDateTime): void
+}
+
+class RepairOrder <<Entity>> {
+  - id: Long
+  --
+  - appointment: Appointment
+  - observations: List<Observation>
+  - spareParts: List<Spare>
+  - service: Service
+  - assignedWorker: Worker
+  - status: RepairStatus
+  - cost: double
+  - startDate: LocalDateTime
+  - endDate: LocalDateTime
+  --
+  + getDetails(): String
+  + updateStatus(newStatus: ServiceStatus): void
+  + addObservation(content: String, worker: Worker): void
+  + calculateCost(): double
+  + finalizeOrder(): void
+}
+class Observation <<Entity>> {
+  - id: Long
+  --
+  - content: String
+  - date: LocalDateTime
+  - worker: Worker
+  --
+  + getDetails(): String
+}
+
+abstract class AppointmentState <<State>> {
+  - appointment: Appointment
+  --
+  + updateStatus(newState: State): void
+  + getStatus(): String
+  + cancel(appointment: Appointment): void
+  + reschedule(appointment: Appointment, newDate: LocalDateTime): void
+}
+
+class Pending <<State>> extends AppointmentState {}
+class Confirmed <<State>> extends AppointmentState {}
+class Completed <<State>> extends AppointmentState {}
+class Cancelled <<State>> extends AppointmentState {}
+
+abstract class RepairStatus <<State>> {
+  - repairOrder: RepairOrder
+  --
+  + updateStatus(newStatus: RepairStatus): void
+  + getStatus(): String
+}
+
+class InProgress <<State>> extends RepairStatus {}
+class WaitingParts <<State>> extends RepairStatus {}
+class CompletedRepair <<State>> extends RepairStatus {}
+class CancelledRepair <<State>> extends RepairStatus {}
+
+Appointment "1" -left-> "*" RepairOrder
+RepairOrder --> RepairStatus
+RepairOrder "1" -left-> "0..*" Observation
+AppointmentState -> Appointment
+Appointment o-down-> AppointmentState
+RepairOrder o-down-> RepairStatus
+
+@enduml
