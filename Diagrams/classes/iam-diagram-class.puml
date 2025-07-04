@@ -93,10 +93,10 @@
   }
 
 User "1..*" -- "*" Access
-AccessLog .right.> AccessResult
+AccessLog .down.> AccessResult
 (User, Access) .> AccessLog
-User o-right-> Authenticator
-User o-down-> Role
+User o-down-> Authenticator
+User o-right-> Role
 Access o-down-> AccessCommand
 
 

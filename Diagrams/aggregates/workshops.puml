@@ -1,0 +1,146 @@
+@startuml Workshop BC Aggregate
+
+package "Workshop Aggregate" {
+
+    class Workshop <<AggregateRoot>> {
+        - id: UUID
+        - name: String
+        - ruc: RucNumber
+        - address: Address
+        - contact: ContactInfo
+        - schedule: WeeklySchedule
+        - promotions: List<Promotion>
+        - services: List<IService>
+        - statistics: List<Statistics>
+        --
+        + editProfile(name: String, address: Address, contact: ContactInfo): void
+        + listAvailableServices(): List<IService>
+        + generateReport(start: LocalDateTime, end: LocalDateTime): Report
+        + acceptAppointment(appointmentId: Long): void
+        + rejectAppointment(appointmentId: Long): void
+        + createRepairOrder(appointmentId: Long): void
+    }
+
+    class Address <<ValueObject>> {
+        - street: String
+        - city: String
+        - district: String
+        --
+        + getFullAddress(): String
+    }
+
+    class ContactInfo <<ValueObject>> {
+        - phone: String
+        - email: String
+        --
+        + getEmail(): String
+        + getPhone(): String
+    }
+
+    class WeeklySchedule <<ValueObject>> {
+        - openingTime: LocalTime
+        - closingTime: LocalTime
+        - workingDays: List<String>
+        --
+        + getWorkingHours(): String
+    }
+
+    class Promotion <<Entity>> {
+        - id: Long
+        - title: String
+        - discount: Percentage
+        - validPeriod: DateRange
+        --
+        + isValid(date: LocalDate): boolean
+    }
+
+    class Statistics <<Entity>> {
+        - id: Long
+        - totalAppointments: int
+        - completedServices: int
+        - averageRating: Percentage
+        --
+        + update(total: int, completed: int, rating: double): void
+    }
+
+    class Percentage <<ValueObject>> {
+        - value: double
+    }
+
+    class DateRange <<ValueObject>> {
+        - start: LocalDate
+        - end: LocalDate
+        --
+        + isWithinRange(date: LocalDate): boolean
+    }
+
+    class Money <<ValueObject>> {
+        - amount: BigDecimal
+        - currency: String
+    }
+
+    interface IService <<Interface>> {
+        + displayInformation(): String
+        + getPrice(): Money
+    }
+
+    class RepairService <<Entity>> {
+        - id: Long
+        - name: String
+        - description: String
+        - laborCost: Money
+        --
+        + displayInformation(): String
+        + getPrice(): Money
+    }
+
+    class MaintenanceService <<Entity>> {
+        - id: Long
+        - name: String
+        - interval: String
+        - cost: Money
+        --
+        + displayInformation(): String
+        + getPrice(): Money
+    }
+
+    class BasicService <<Entity>> {
+        - id: Long
+        - name: String
+        - description: String
+        - price: Money
+        --
+        + displayInformation(): String
+        + getPrice(): Money
+    }
+
+    class ServicePackage <<Entity>> {
+        - id: Long
+        - name: String
+        - services: List<IService>
+        --
+        + add(service: IService): void
+        + remove(service: IService): void
+        + getServices(): List<IService>
+        + displayInformation(): String
+        + getPrice(): Money
+    }
+
+    Workshop *-- Address
+    Workshop *-- ContactInfo
+    Workshop *-- WeeklySchedule
+    Workshop *-- Promotion
+    Workshop *-- Statistics
+    Workshop *-- IService
+    ServicePackage -- IService
+
+    IService <|.. RepairService
+    IService <|.. MaintenanceService
+    IService <|.. BasicService
+    IService <|.left. ServicePackage
+    IService <-down- Money
+    Statistics -down-> Percentage
+    Promotion -down-> DateRange
+    Promotion -down-> Percentage
+}
+@enduml

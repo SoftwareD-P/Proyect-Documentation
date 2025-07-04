@@ -1,0 +1,91 @@
+@startuml Payments BC Aggregate
+
+package "Payments Aggregate" {
+
+  class Payment <<AggregateRoot>> {
+    - id: PaymentId
+    - amount: Money
+    - date: PaymentDate
+    - state: PaymentState
+    - method: PaymentMethod
+    - userId: UserId
+    --
+    + processPayment(): boolean
+    + confirmPayment(): void
+    + cancelPayment(): void
+    + getDetails(): String
+  }
+
+  class PaymentId <<ValueObject>> {
+    - value: Long
+  }
+
+  class Money <<ValueObject>> {
+    - amount: double
+    - currency: String
+  }
+
+  class PaymentDate <<ValueObject>> {
+    - value: LocalDateTime
+  }
+
+  class UserId <<ValueObject>> {
+    - value: Long
+  }
+
+  interface PaymentMethod <<Strategy>> {
+    + processPayment(amount: Money): boolean
+    + getMethodName(): String
+  }
+
+  class PayPal <<Entity>> implements PaymentMethod {
+    - email: String
+    + processPayment(amount: Money): boolean
+    + getMethodName(): String
+  }
+
+  class CreditCard <<Entity>> implements PaymentMethod {
+    - cardNumber: String
+    - cardHolderName: String
+    - expirationDate: LocalDateTime
+    - cvv: String
+    + processPayment(amount: Money): boolean
+    + getMethodName(): String
+  }
+
+  class YapePlin <<Entity>> implements PaymentMethod {
+    - phoneNumber: String
+    + processPayment(amount: Money): boolean
+    + getMethodName(): String
+  }
+
+  abstract class PaymentState <<State>> {
+    + confirm(payment: Payment): void
+    + cancel(payment: Payment): void
+    + getStatus(): String
+  }
+
+  class PendingState <<State>> extends PaymentState {
+    + confirm(payment: Payment): void
+    + cancel(payment: Payment): void
+    + getStatus(): String
+  }
+
+  class CompletedState <<State>> extends PaymentState {
+    + confirm(payment: Payment): void
+    + getStatus(): String
+  }
+
+  class CancelledState <<State>> extends PaymentState {
+    + cancel(payment: Payment): void
+    + getStatus(): String
+  }
+
+  Payment *-- PaymentId
+  Payment *-- Money
+  Payment *-- PaymentDate
+  Payment *-- PaymentMethod
+  Payment *-- PaymentState
+  Payment *-- UserId
+}
+@enduml

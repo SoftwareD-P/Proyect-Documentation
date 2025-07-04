@@ -1,0 +1,50 @@
+@startuml Notifications BC Object Diagram
+
+object UserJuanPerez {
+  id: 501
+  name: "Juan Pérez"
+}
+
+object WorkshopAutoFix {
+  id: 1
+  name: "Taller AutoFix"
+}
+
+object ChatSession001 {
+  id: 1001
+  participants: "Juan Pérez, Taller AutoFix"
+}
+
+object Message001 {
+  id: 9001
+  sender: "Juan Pérez"
+  content: "Aquí está la foto del daño"
+  timestamp: "2025-07-02 14:35"
+}
+
+object ImageAttachment001 {
+  id: 8001
+  fileName: "parachoques_danado.jpg"
+  mediaType: "image/jpeg"
+  resolution: "1280x720"
+}
+
+object InAppNotification001 {
+  id: 7001
+  message: "Nuevo mensaje de Juan Pérez"
+  date: "2025-07-02 14:35"
+  recipients: "Taller AutoFix"
+}
+
+object InAppNotificationFactory001
+
+ChatSession001 --> UserJuanPerez : incluye
+ChatSession001 --> WorkshopAutoFix : incluye
+ChatSession001 --> Message001 : contiene
+
+Message001 --> ImageAttachment001 : adjunta
+
+InAppNotificationFactory001 --> InAppNotification001 : crea notificación
+InAppNotification001 --> WorkshopAutoFix : destinatario
+
+@enduml

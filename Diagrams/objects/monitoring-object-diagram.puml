@@ -1,0 +1,38 @@
+@startuml Monitoring BC Object Diagram
+
+object "InServiceState" as State_InService {
+  vehicleId: 123
+  status: "IN_SERVICE"
+}
+
+object StatusService {
+  currentState: InServiceState
+}
+
+object HistoryService {
+  log: "Vehículo 123 → IN_SERVICE"
+}
+
+object NotificationService
+
+object WorkshopDashboard
+object CustomerDashboard
+object NotificationServiceObserver
+
+StatusService --> WorkshopDashboard : observer
+StatusService --> CustomerDashboard : observer
+StatusService --> NotificationServiceObserver : observer
+
+object TrackingFacade {
+  vehicleId: 123
+}
+
+TrackingFacade --> StatusService : statusService
+TrackingFacade --> HistoryService : historyService
+TrackingFacade --> NotificationService : notificationService
+
+StatusService --> State_InService : current state
+StatusService --> NotificationServiceObserver : notifies
+HistoryService --> State_InService : logs status
+
+@enduml

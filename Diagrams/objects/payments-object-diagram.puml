@@ -1,0 +1,41 @@
+@startuml Payment BC Object Diagram
+
+object UserCarlos {
+  id: 301
+  name: "Carlos Díaz"
+}
+
+object YapeMethod {
+  type: "YapePlin"
+  phoneNumber: "+51987654321"
+  getMethodName(): "Yape"
+  processPayment(): true
+}
+
+object PendingState {
+  getStatus(): "PENDING"
+}
+object CompletedState {
+  getStatus(): "COMPLETED"
+}
+
+object PaymentService {
+  + process(payment)
+  + confirm(payment)
+}
+
+object PaymentTX1001 {
+  id: 1001
+  amount: 120.00
+  date: "2025-07-02 12:00"
+  state: CompletedState
+}
+
+UserCarlos --> PaymentTX1001 : initiates
+PaymentTX1001 --> YapeMethod : uses method
+PaymentTX1001 --> PendingState : initial state
+PaymentTX1001 --> CompletedState : final state
+PaymentService --> PaymentTX1001 : manages
+PaymentService --> YapeMethod : calls strategy
+
+@enduml

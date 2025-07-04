@@ -1,0 +1,44 @@
+@startuml Workshop BC Object Diagram
+
+object Workshop {
+  id = 1
+  name = "Taller AutoFix"
+  RUC = "20601234567"
+  address = "Av. Los Motores 123"
+  phone = "+51-1-555-1234"
+  email = "contacto@autofix.pe"
+}
+
+object WeeklySchedule {
+  openingTime = "09:00"
+  closingTime = "18:00"
+  workingDays = "Lun, Mar, Mié, Jue, Vie"
+}
+
+object RepairService {
+  id = "RS101"
+  name = "Revisión y Reparación General"
+  price = "S/ 350.00"
+}
+
+object MaintenanceService {
+  id = "MS201"
+  name = "Servicio de Mantenimiento Preventivo"
+  price = "S/ 250.00"
+}
+
+object ServicePackage {
+  id = "PK301"
+  name = "Pack Mantenimiento Premium"
+  price = "S/ 550.00"
+}
+
+' Relaciones
+Workshop -- WeeklySchedule : schedule
+Workshop --> RepairService : offers
+Workshop --> MaintenanceService : offers
+Workshop --> ServicePackage : offers
+ServicePackage --> RepairService : includes
+ServicePackage --> MaintenanceService : includes
+
+@enduml

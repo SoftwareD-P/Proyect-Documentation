@@ -49,7 +49,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             }
 
             # Appointments BC
-            appointmentsInterface = component "Interface Layer Appointments" "" "NodeJS(NestJS)" {
+            appointmentsInterfaces = component "Interfaces Layer Appointments" "" "NodeJS(NestJS)" {
                 tags "AppointmentsBC"
             }
             appointmentsApplication = component "Application Layer Appointments" "" "NodeJS(NestJS)" {
@@ -63,7 +63,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             }
 
             # Workshops BC
-            workshopsInterface = component "Interface Layer Workshops" "" "NodeJS(NestJS)" {
+            workshopsInterfaces = component "Interfaces Layer Workshops" "" "NodeJS(NestJS)" {
                 tags "WorkshopsBC"
             }
             workshopsApplication = component "Application Layer Workshops" "" "NodeJS(NestJS)" {
@@ -77,7 +77,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             }
 
             # Notification BC
-            notificationInterface = component "Interface Layer Notification" "" "NodeJS(NestJS)" {
+            notificationInterfaces = component "Interfaces Layer Notification" "" "NodeJS(NestJS)" {
                 tags "NotificationBC"
             }
             notificationApplication = component "Application Layer Notification" "" "NodeJS(NestJS)" {
@@ -94,7 +94,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             }
 
             # IAM BC
-            iamInterface = component "Interface Layer IAM" "" "NodeJS(NestJS)" {
+            iamInterfaces = component "Interfaces Layer IAM" "" "NodeJS(NestJS)" {
                 tags "IAMBC"
             }
             iamApplication = component "Application Layer IAM" "" "NodeJS(NestJS)" {
@@ -108,7 +108,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             }
 
             # Payments BC
-            paymentsInterface = component "Interface Layer Payments" "" "NodeJS(NestJS)" {
+            paymentsInterfaces = component "Interfaces Layer Payments" "" "NodeJS(NestJS)" {
                 tags "PaymentsBC"
             }
             paymentsApplication = component "Application Layer Payments" "" "NodeJS(NestJS)" {
@@ -122,7 +122,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             }
 
             # Monitoring BC
-            monitoringInterface = component "Interface Layer Monitoring" "" "NodeJS(NestJS)" {
+            monitoringInterfaces = component "Interfaces Layer Monitoring" "" "NodeJS(NestJS)" {
                 tags "MonitoringBC"
             }
             monitoringApplication = component "Application Layer Monitoring" "" "NodeJS(NestJS)" {
@@ -222,14 +222,14 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     notification -> EmailSystem "Usa"
     
     # appointments
-    appointmentsInterface -> appointmentsApplication
+    appointmentsInterfaces -> appointmentsApplication
     appointmentsApplication -> appointmentsDomain 
     appointmentsApplication -> appointmentsInfrastructure
     appointmentsInfrastructure -> appointmentsDomain
     appointmentsInfrastructure -> database "Usa"
 
     # workshops
-    workshopsInterface -> workshopsApplication
+    workshopsInterfaces -> workshopsApplication
     workshopsApplication -> workshopsDomain 
     workshopsApplication -> workshopsInfrastructure
     workshopsInfrastructure -> workshopsDomain
@@ -238,7 +238,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     workshopsInfrastructure -> SunatDatabase "Usa"
 
     # Notification
-    notificationInterface -> notificationApplication
+    notificationInterfaces -> notificationApplication
     notificationApplication -> notificationDomain 
     notificationApplication -> notificationInfrastructure
     notificationInfrastructure -> notificationDomain
@@ -247,7 +247,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     notificationInfrastructure -> EmailSystem "Usa"
 
     # iam
-    iamInterface -> iamApplication
+    iamInterfaces -> iamApplication
     iamApplication -> iamDomain 
     iamApplication -> iamInfrastructure
     iamInfrastructure -> iamDomain
@@ -255,7 +255,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     iamInfrastructure -> OAuthProvider "Usa"
     
     # Payments
-    paymentsInterface -> paymentsApplication
+    paymentsInterfaces -> paymentsApplication
     paymentsApplication -> paymentsDomain 
     paymentsApplication -> paymentsInfrastructure
     paymentsInfrastructure -> paymentsDomain
@@ -263,7 +263,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     paymentsInfrastructure -> PaymentSystem "Usa"
 
     # Monitoring
-    monitoringInterface -> monitoringApplication
+    monitoringInterfaces -> monitoringApplication
     monitoringApplication -> monitoringDomain 
     monitoringApplication -> monitoringInfrastructure
     monitoringInfrastructure -> monitoringDomain

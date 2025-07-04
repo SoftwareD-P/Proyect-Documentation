@@ -1,0 +1,146 @@
+@startuml Appointments BC Aggregate
+
+package "Appointment Aggregate" {
+
+  class Appointment <<AggregateRoot>> {
+    - id: AppointmentId
+    - clientId: ClientId
+    - serviceId: ServiceId
+    - workshopId: WorkshopId
+    - assignedWorkerId: WorkerId
+    - date: AppointmentDate
+    - state: AppointmentState
+    --
+    + getDetails(): String
+    + cancel(): void
+    + reschedule(newDate: AppointmentDate): void
+  }
+
+  class RepairOrder <<Entity>> {
+    - id: RepairOrderId
+    - appointmentId: AppointmentId
+    - observations: List<Observation>
+    - spareParts: List<Spare>
+    - serviceId: ServiceId
+    - assignedWorkerId: WorkerId
+    - cost: Money
+    - status: RepairOrderState
+    - startDate: RepairDate
+    - endDate: RepairDate
+    --
+    + getDetails(): String
+    + updateStatus(newStatus: RepairOrderState): void
+    + addObservation(content: ObservationContent, workerId: WorkerId): void
+    + calculateCost(): Money
+    + finalizeOrder(): void
+  }
+
+  class Observation <<Entity>> {
+    - id: ObservationId
+    - content: ObservationContent
+    - date: ObservationDate
+    - workerId: WorkerId
+    --
+    + getDetails(): String
+  }
+
+  class AppointmentId <<ValueObject>> {
+    - value: Long
+  }
+
+  class AppointmentDate <<ValueObject>> {
+    - value: LocalDateTime
+    + isFuture(): boolean
+  }
+
+  class RepairOrderId <<ValueObject>> {
+    - value: Long
+  }
+
+  class RepairDate <<ValueObject>> {
+    - value: LocalDateTime
+    + isValid(): boolean
+  }
+
+  class ClientId <<ValueObject>> {
+    - value: Long
+  }
+
+  class WorkerId <<ValueObject>> {
+    - value: Long
+  }
+
+  class ServiceId <<ValueObject>> {
+    - value: Long
+  }
+
+  class WorkshopId <<ValueObject>> {
+    - value: Long
+  }
+
+  class ObservationId <<ValueObject>> {
+    - value: Long
+  }
+
+  class ObservationContent <<ValueObject>> {
+    - text: String
+    + isValid(): boolean
+  }
+
+  class ObservationDate <<ValueObject>> {
+    - value: LocalDateTime
+  }
+
+  class Money <<ValueObject>> {
+    - amount: double
+    - currency: String
+    + getAmount(): double
+    + getCurrency(): String
+  }
+
+  ' === STATES ===
+  abstract class AppointmentState <<ValueObject>> {
+    + getStatus(): String
+    + cancel(): AppointmentState
+    + reschedule(newDate: AppointmentDate): AppointmentState
+  }
+
+  class Pending <<ValueObject>> extends AppointmentState
+  class Confirmed <<ValueObject>> extends AppointmentState
+  class Completed <<ValueObject>> extends AppointmentState
+  class Cancelled <<ValueObject>> extends AppointmentState
+
+  abstract class RepairOrderState <<ValueObject>> {
+    + getStatus(): String
+    + canTransitionTo(newStatus: RepairOrderState): boolean
+  }
+
+  class InProgress <<ValueObject>> extends RepairOrderState
+  class WaitingParts <<ValueObject>> extends RepairOrderState
+  class CompletedRepair <<ValueObject>> extends RepairOrderState
+  class CancelledRepair <<ValueObject>> extends RepairOrderState
+
+  Appointment *-- AppointmentId
+  Appointment *-- AppointmentDate
+  Appointment *-- ClientId
+  Appointment *-- ServiceId
+  Appointment *-- WorkshopId
+  Appointment *-- WorkerId
+  Appointment *-- AppointmentState
+
+  RepairOrder *-- RepairOrderId
+  RepairOrder *-- AppointmentId
+  RepairOrder *-- WorkerId
+  RepairOrder *-- ServiceId
+  RepairOrder *-- RepairOrderState
+  RepairOrder *-- RepairDate
+  RepairOrder *-- Money
+  RepairOrder -- Observation
+
+  Observation *-- ObservationId
+  Observation *-- ObservationDate
+  Observation *-- ObservationContent
+  Observation *-- WorkerId
+
+}
+@enduml

@@ -1,0 +1,99 @@
+@startuml IAM BC Aggregate
+
+package "IAM Aggregate" {
+
+  class User <<AggregateRoot>> {
+    - id: UserId
+    - username: Username
+    - password: EncryptedPassword
+    - isActive: boolean
+    - lastLogin: LastLoginTimestamp
+    - authenticator: Authenticator
+    - role: Role
+    - accessLogs: List<AccessLog>
+    --
+    + changePassword(old: EncryptedPassword, new: EncryptedPassword): void
+    + authenticate(): boolean
+    + executeAccessCommand(command: AccessCommand): AccessLog
+  }
+
+  class AccessLog <<Entity>> {
+    - timestamp: AccessTimestamp
+    - result: AccessResult
+    - command: AccessCommand
+    --
+    + wasSuccessful(): boolean
+  }
+
+  interface Authenticator <<Interface>> {
+    + authenticate(username: Username, password: EncryptedPassword): boolean
+  }
+
+  class LocalAuthenticator <<Strategy>> implements Authenticator
+  class GoogleAuthenticator <<Strategy>> implements Authenticator
+  class FacebookAuthenticator <<Strategy>> implements Authenticator
+
+  interface Role <<Interface>> {
+    + getPermissions(): List<AccessCommand>
+  }
+
+  class WorkshopManagerRole <<Entity>> implements Role
+  class VehicleOwnerRole <<Entity>> implements Role
+  class MechanicRole <<Entity>> implements Role
+  class TechnicianRole <<Entity>> implements Role
+
+  interface AccessCommand <<Entity>> {
+    + execute(user: User): AccessResult
+  }
+
+  class Login <<Entity>> implements AccessCommand
+  class WorkshopSearch <<Entity>> implements AccessCommand
+  class AppointmentBook <<Entity>> implements AccessCommand
+  class ServiceRequest <<Entity>> implements AccessCommand
+  class VehicleTrack <<Entity>> implements AccessCommand
+
+  abstract class AccessResult <<ValueObject>> {
+    - status: String
+    --
+    + isSuccess(): boolean
+  }
+
+  class SuccessResult <<ValueObject>> extends AccessResult
+  class FailureResult <<ValueObject>> extends AccessResult
+
+  class UserId <<ValueObject>> {
+    - value: Long
+  }
+
+  class Username <<ValueObject>> {
+    - value: String
+  }
+
+  class EncryptedPassword <<ValueObject>> {
+    - hashed: String
+  }
+
+  class LastLoginTimestamp <<ValueObject>> {
+    - value: LocalDateTime
+  }
+
+  class AccessTimestamp <<ValueObject>> {
+    - value: LocalDateTime
+  }
+
+  ' Associations (Aggregation Root Focus)
+  User *-- UserId
+  User *-- Username
+  User *-- EncryptedPassword
+  User *-- LastLoginTimestamp
+  User *-- Authenticator
+  User *-- Role
+  User *-- AccessLog
+
+  AccessLog *-- AccessTimestamp
+  AccessLog *-- AccessResult
+  AccessLog *-- AccessCommand
+
+}
+
+@enduml

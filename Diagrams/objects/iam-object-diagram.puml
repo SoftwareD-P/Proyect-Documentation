@@ -1,0 +1,42 @@
+@startuml IAM BC Object Diagram
+
+object UserJuanPerez {
+  id: 501
+  username: "juan.perez"
+  isActive: true
+  lastLogin: "2025-07-02 09:45"
+}
+
+object GoogleAuth {
+  type: "GoogleAuthenticator"
+}
+UserJuanPerez --> GoogleAuth : authenticator
+
+object RoleVehicleOwner {
+  type: "VehicleOwnerRole"
+  permissions: [Login, WorkshopSearch, AppointmentBook]
+}
+UserJuanPerez --> RoleVehicleOwner : role
+
+object CmdWorkshopSearch {
+  command: "WorkshopSearch"
+}
+object AccessWS {
+  id: 1001
+  type: CmdWorkshopSearch
+}
+UserJuanPerez --> AccessWS
+AccessWS --> CmdWorkshopSearch
+
+object ResultSuccess {
+  result: "SUCCESS"
+}
+object LogAccessWS {
+  id: 2001
+  date: "2025-07-02 10:00"
+}
+LogAccessWS --> UserJuanPerez : user
+LogAccessWS --> AccessWS : access
+LogAccessWS --> ResultSuccess : result
+
+@enduml

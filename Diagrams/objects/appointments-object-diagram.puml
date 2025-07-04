@@ -1,0 +1,69 @@
+@startuml Appointments BC Object Diagram
+
+object Appointment {
+  id: 1001
+  date: "2025‑07‑05 10:00"
+}
+
+object "ConfirmedState" as Confirmed {
+  status: CONFIRMED
+}
+
+object VehicleOwner {
+  id: 501
+  name: "Juan Pérez"
+}
+
+object Service {
+  id: MS201
+  name: "Servicio de Mantenimiento Preventivo"
+  price: "S/ 250.00"
+}
+
+object Workshop {
+  id: 1
+  name: "Taller AutoFix"
+}
+
+object Worker {
+  id: 301
+  name: "Carlos Ruiz"
+  role: MECHANIC
+}
+
+object RepairOrder {
+  id: 2001
+  startDate: "2025‑07‑05 10:30"
+  cost: 250.00
+}
+
+object "InProgressState" as InProgress {
+  status: IN_PROGRESS
+}
+
+object Observation1 {
+  id: 9001
+  content: "Ruido en el motor al acelerar"
+  date: "2025‑07‑05 10:45"
+}
+
+object Observation2 {
+  id: 9002
+  content: "Filtros de aire sucios"
+  date: "2025‑07‑05 11:10"
+}
+
+Appointment -- Confirmed : state
+Appointment --> VehicleOwner : client
+Appointment --> Service : service
+Appointment --> Workshop : workshop
+Appointment --> Worker : assignedWorker
+
+RepairOrder -- InProgress : status
+RepairOrder --> Appointment
+RepairOrder --> Worker : assignedWorker
+RepairOrder --> Service : service
+RepairOrder --> Observation1 : observation
+RepairOrder --> Observation2 : observation
+
+@enduml

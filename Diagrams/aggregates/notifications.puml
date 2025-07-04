@@ -1,0 +1,53 @@
+@startuml Notification BC Aggregate
+
+package "Notification Aggregate" {
+  abstract class Notification <<AggregateRoot>> {
+    - id: NotificationId
+    - message: NotificationMessage
+    - date: NotificationDate
+    - recipients: List<UserId>
+    --
+    + send(): void
+  }
+
+  class InAppNotification <<Entity>> extends Notification
+  class EmailNotification <<Entity>> extends Notification {
+    - email: EmailAddress
+  }
+  class SMSNotification <<Entity>> extends Notification {
+    - phoneNumber: PhoneNumber
+  }
+
+  class NotificationId <<ValueObject>> {
+    - value: Long
+  }
+
+  class NotificationMessage <<ValueObject>> {
+    - text: String
+  }
+
+  class NotificationDate <<ValueObject>> {
+    - value: LocalDateTime
+  }
+
+  class UserId <<ValueObject>> {
+    - value: Long
+  }
+
+  class EmailAddress <<ValueObject>> {
+    - value: String
+  }
+
+  class PhoneNumber <<ValueObject>> {
+    - value: String
+  }
+
+  Notification *-- NotificationId
+  Notification *-- NotificationMessage
+  Notification *-- NotificationDate
+  Notification *-- "*" UserId
+  EmailNotification *-- EmailAddress
+  SMSNotification *-- PhoneNumber
+}
+
+@enduml

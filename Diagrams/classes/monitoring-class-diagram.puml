@@ -46,8 +46,8 @@ class NotificationStateService <<Observer>> implements VehicleObserver  {
   + notifyCustomer(vehicleId: Long, status: VehicleState): void
 }
 
-VehicleTrackingFacade -up-> VehicleStatusService
-VehicleTrackingFacade -down-> NotificationStateService
+VehicleTrackingFacade -down-> VehicleStatusService
+VehicleTrackingFacade -left-> NotificationStateService
 VehicleTrackingFacade -down-> VehicleHistoryService
 'VehicleStatus <|-- PendingState
 'VehicleStatus <|-- InServiceState

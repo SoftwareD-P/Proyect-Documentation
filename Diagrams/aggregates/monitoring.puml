@@ -1,0 +1,63 @@
+@startuml Monitoring BC Aggregate
+
+package "Vehicle Aggregate" {
+
+  class Vehicle <<AggregateRoot>> {
+    - id: VehicleId
+    - plateNumber: PlateNumber
+    - currentState: VehicleState
+    --
+    + updateState(newState: VehicleState): void
+    + getCurrentState(): String
+  }
+
+  class VehicleId <<ValueObject>> {
+    - value: Long
+    --
+    + getValue(): Long
+    + equals(other: VehicleId): boolean
+    + toString(): String
+  }
+
+  class PlateNumber <<ValueObject>> {
+    - value: String
+    --
+    + getValue(): String
+    + isValid(): boolean
+    + equals(other: PlateNumber): boolean
+    + toString(): String
+  }
+
+  abstract class VehicleState <<ValueObject>> {
+    - value: String
+    --
+    + getName(): String
+    + canTransitionTo(next: VehicleState): boolean
+  }
+
+  class PendingState <<ValueObject>> extends VehicleState {
+    + getName(): String
+    + canTransitionTo(next: VehicleState): boolean
+  }
+
+  class InServiceState <<ValueObject>> extends VehicleState {
+    + getName(): String
+    + canTransitionTo(next: VehicleState): boolean
+  }
+
+  class ReadyForPickupState <<ValueObject>> extends VehicleState {
+    + getName(): String
+    + canTransitionTo(next: VehicleState): boolean
+  }
+
+  class DeliveredState <<ValueObject>> extends VehicleState {
+    + getName(): String
+    + canTransitionTo(next: VehicleState): boolean
+  }
+
+  Vehicle *-- VehicleId
+  Vehicle *-- PlateNumber
+  Vehicle *-- VehicleState
+
+}
+@enduml
