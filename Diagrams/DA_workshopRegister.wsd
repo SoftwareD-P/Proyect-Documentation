@@ -1,0 +1,26 @@
+@startuml Registro Taller
+
+|Taller|
+start
+:Registrar taller;
+:Ingresar RUC, nombre, servicios, horarios;
+
+|Sistema|
+:Validar RUC con SUNAT;
+if (¿RUC válido?) then (Sí)
+|Taller|
+:Completar o editar datos;
+:Confirmar registro;
+  |Sistema|
+  :Enviar correo de confirmación;
+else (No)
+  :Mostrar mensaje de error;
+  stop
+endif
+
+|Taller|
+:Confirmar correo;
+:Iniciar sesión;
+stop
+
+@enduml

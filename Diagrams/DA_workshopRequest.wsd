@@ -1,0 +1,28 @@
+@startuml Solicitar Cita Taller
+
+|Dueño de vehículo|
+start
+:Ingresa a Mecanocraft;
+:Selecciona taller y servicio;
+:Envía solicitud de servicio;
+
+|Taller|
+:Recibe solicitud de servicio;
+if (¿Hay disponibilidad?) then (Sí)
+  |Dueño de vehículo|
+  :Recibe confirmación de disponibilidad;
+else (No)
+  |Taller|
+  :Notifica al dueño de vehículo;
+  stop
+endif
+
+|Dueño de vehículo|
+:Confirma asistencia al taller;
+|Taller|
+:Recibe confirmación de asistencia;
+|Dueño de vehículo|
+:Asiste al taller;
+stop
+
+@enduml

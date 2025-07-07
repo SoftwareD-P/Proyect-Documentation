@@ -1,0 +1,28 @@
+@startuml Registro Cliente
+
+|Dueño de Vehículo|
+start
+:Ingresar placa;
+
+|Sistema|
+:Consultar base de datos vehicular;
+if (Placa válida?) then (Sí)
+  :Autocompletar datos;
+else
+  :Mostrar mensaje de error;
+  :Permitir ingreso manual;
+endif
+
+|Dueño de Vehículo|
+:Completar o editar datos;
+:Confirmar registro;
+
+|Sistema|
+:Enviar correo de validación;
+
+|Dueño de Vehículo|
+:Confirmar correo;
+:Iniciar sesión;
+stop
+
+@enduml

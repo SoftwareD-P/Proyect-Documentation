@@ -1,0 +1,17 @@
+@startuml Proceso del Vehículo dentro del Taller
+
+[*] --> EsperandoRecepcion
+
+EsperandoRecepcion --> EnDiagnostico : Taller revisa el vehículo
+EnDiagnostico --> EsperandoAutorizacion : Cliente debe aprobar reparaciones
+EsperandoAutorizacion --> EnReparacion : Cliente autoriza
+EsperandoAutorizacion --> Cancelado : Cliente no autoriza
+
+EnReparacion --> LavadoFinal : Reparaciones terminadas
+LavadoFinal --> ListoParaEntrega : Vehículo limpio
+ListoParaEntrega --> Entregado : Cliente recoge
+Entregado --> [*]
+
+Cancelado --> [*]
+
+@enduml

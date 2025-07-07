@@ -10,41 +10,41 @@ object WorkshopAutoFix {
   name: "Taller AutoFix"
 }
 
-object ChatSession001 {
+object ChatSession {
   id: 1001
   participants: "Juan Pérez, Taller AutoFix"
 }
 
-object Message001 {
+object Message {
   id: 9001
   sender: "Juan Pérez"
   content: "Aquí está la foto del daño"
   timestamp: "2025-07-02 14:35"
 }
 
-object ImageAttachment001 {
+object ImageAttachment {
   id: 8001
   fileName: "parachoques_danado.jpg"
   mediaType: "image/jpeg"
   resolution: "1280x720"
 }
 
-object InAppNotification001 {
+object InAppNotification {
   id: 7001
   message: "Nuevo mensaje de Juan Pérez"
   date: "2025-07-02 14:35"
   recipients: "Taller AutoFix"
 }
 
-object InAppNotificationFactory001
+object InAppNotificationFactory
 
-ChatSession001 --> UserJuanPerez : incluye
-ChatSession001 --> WorkshopAutoFix : incluye
-ChatSession001 --> Message001 : contiene
+ChatSession --> UserJuanPerez : incluye
+ChatSession --> WorkshopAutoFix : incluye
+ChatSession --> Message : contiene
 
-Message001 --> ImageAttachment001 : adjunta
+Message --> ImageAttachment : adjunta
 
-InAppNotificationFactory001 --> InAppNotification001 : crea notificación
-InAppNotification001 --> WorkshopAutoFix : destinatario
+InAppNotificationFactory --> InAppNotification : crea notificación
+InAppNotification --> WorkshopAutoFix : destinatario
 
 @enduml

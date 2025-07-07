@@ -1,0 +1,24 @@
+@startuml Estado de Registro del Usuario
+[*] --> InicioRegistro
+
+InicioRegistro --> ValidandoDatos : Datos ingresados
+ValidandoDatos --> ConsultandoBaseVehicular : Usuario usa placa (cliente)
+ValidandoDatos --> ConsultandoRUC : Usuario es taller
+
+ConsultandoBaseVehicular --> Autocompletado : Placa válida
+ConsultandoBaseVehicular --> RegistroManual : Placa no válida
+
+ConsultandoRUC --> Validado : RUC válido
+ConsultandoRUC --> RegistroManual : RUC inválido
+
+Autocompletado --> EdicionOpcional
+RegistroManual --> EdicionOpcional
+Validado --> EdicionOpcional
+
+EdicionOpcional --> EsperandoConfirmacion : Envía correo
+EsperandoConfirmacion --> Confirmado : Usuario verifica email
+EsperandoConfirmacion --> [*] : No verifica
+
+Confirmado --> CuentaActiva
+CuentaActiva --> [*]
+@enduml

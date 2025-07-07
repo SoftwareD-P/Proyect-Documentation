@@ -1,0 +1,11 @@
+@startuml x
+
+[*] --> Pending
+Pending --> Confirmed : confirm()
+Confirmed --> Completed : complete()
+Confirmed --> Cancelled : cancel()
+Pending --> Cancelled : cancel()
+Cancelled --> [*]
+Completed --> [*]
+
+@enduml

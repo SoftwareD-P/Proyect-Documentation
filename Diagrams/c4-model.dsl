@@ -32,7 +32,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             workshops = component "Workshops" "" "NodeJS(NestJS)" {
                 tags "All"
             }
-            notification = component "Notification" "" "NodeJS(NestJS)" {
+            notification = component "Notifications" "" "NodeJS(NestJS)" {
                 tags "All"
             }
             iam = component "Identity and Access Management" "" "NodeJS(NestJS)" {
@@ -75,6 +75,11 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             workshopsDomain = component "Domain Layer Workshops" "" "NodeJS(NestJS)" {
                 tags "WorkshopsBC"
             }
+            workshopConnector = component "RUC & Vehicle Validation Connector" "Validates data against SUNAT and SUNARP" "NodeJS" {
+                tags "WorkshopsBC", "Connector"
+            }
+
+
 
             # Notification BC
             notificationInterfaces = component "Interfaces Layer Notification" "" "NodeJS(NestJS)" {
@@ -135,7 +140,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
                 tags "MonitoringBC"
             }
             monitoringConnector = component "Google Maps Connector" "" "NodeJS(NestJS)" {
-                tags "MonitoringBC"
+                tags "MonitoringBC", "Connector"
             }
             
         }
@@ -199,43 +204,44 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
 
     # Component-level relationships (within API Application)
     # General
-    appointments -> sharedKernel "Usa"
-    workshops -> sharedKernel "Usa"
-    notification -> sharedKernel "Usa"
-    iam -> sharedKernel "Usa"
-    payments -> sharedKernel "Usa"
-    monitoring -> sharedKernel "Usa"
+    appointments -> sharedKernel "Uses"
+    workshops -> sharedKernel "Uses"
+    notification -> sharedKernel "Uses"
+    iam -> sharedKernel "Uses"
+    payments -> sharedKernel "Uses"
+    monitoring -> sharedKernel "Uses"
     
-    appointments -> database "Usa"
-    workshops -> database "Usa"
-    notification -> database "Usa"
-    iam -> database "Usa"
-    payments -> database "Usa"
-    monitoring -> database "Usa"
+    appointments -> database "Uses"
+    workshops -> database "Uses"
+    notification -> database "Uses"
+    iam -> database "Uses"
+    payments -> database "Uses"
+    monitoring -> database "Uses"
     
-    appointments -> GoogleMaps "Usa"
-    workshops -> SunarpDatabase "Usa"
-    workshops -> SunatDatabase "Usa"
-    iam -> OAuthProvider "Usa"
-    payments -> PaymentSystem "Usa"
-    monitoring -> EmailSystem "Usa"
-    notification -> EmailSystem "Usa"
+    appointments -> GoogleMaps "Uses"
+    workshops -> SunarpDatabase "Uses"
+    workshops -> SunatDatabase "Uses"
+    iam -> OAuthProvider "Uses"
+    payments -> PaymentSystem "Uses"
+    monitoring -> EmailSystem "Uses"
+    notification -> EmailSystem "Uses"
     
     # appointments
     appointmentsInterfaces -> appointmentsApplication
     appointmentsApplication -> appointmentsDomain 
     appointmentsApplication -> appointmentsInfrastructure
     appointmentsInfrastructure -> appointmentsDomain
-    appointmentsInfrastructure -> database "Usa"
+    appointmentsInfrastructure -> database "Uses"
 
     # workshops
     workshopsInterfaces -> workshopsApplication
     workshopsApplication -> workshopsDomain 
     workshopsApplication -> workshopsInfrastructure
     workshopsInfrastructure -> workshopsDomain
-    workshopsInfrastructure -> database "Usa"
-    workshopsInfrastructure -> SunarpDatabase "Usa"
-    workshopsInfrastructure -> SunatDatabase "Usa"
+    workshopsInfrastructure -> database "Uses"
+    workshopsInfrastructure -> workshopConnector "Uses"
+    workshopConnector -> SunatDatabase "Consulta RUC"
+    workshopConnector -> SunarpDatabase "Consulta propiedad"
 
     # Notification
     notificationInterfaces -> notificationApplication
@@ -243,24 +249,24 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     notificationApplication -> notificationInfrastructure
     notificationInfrastructure -> notificationDomain
     notificationInfrastructure -> notificationComponent
-    notificationInfrastructure -> database "Usa"
-    notificationInfrastructure -> EmailSystem "Usa"
+    notificationInfrastructure -> database "Uses"
+    notificationInfrastructure -> EmailSystem "Uses"
 
     # iam
     iamInterfaces -> iamApplication
     iamApplication -> iamDomain 
     iamApplication -> iamInfrastructure
     iamInfrastructure -> iamDomain
-    iamInfrastructure -> database "Usa"
-    iamInfrastructure -> OAuthProvider "Usa"
+    iamInfrastructure -> database "Uses"
+    iamInfrastructure -> OAuthProvider "Uses"
     
     # Payments
     paymentsInterfaces -> paymentsApplication
     paymentsApplication -> paymentsDomain 
     paymentsApplication -> paymentsInfrastructure
     paymentsInfrastructure -> paymentsDomain
-    paymentsInfrastructure -> database "Usa"
-    paymentsInfrastructure -> PaymentSystem "Usa"
+    paymentsInfrastructure -> database "Uses"
+    paymentsInfrastructure -> PaymentSystem "Uses"
 
     # Monitoring
     monitoringInterfaces -> monitoringApplication
@@ -269,8 +275,8 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     monitoringInfrastructure -> monitoringDomain
     monitoringInfrastructure -> monitoringConnector
     monitoringConnector -> GoogleMaps "[JSON/HTTPS]"
-    monitoringInfrastructure -> database "Usa"
-    monitoringInfrastructure -> EmailSystem "Usa"
+    monitoringInfrastructure -> database "Uses"
+    monitoringInfrastructure -> EmailSystem "Uses"
     
     }
 
@@ -302,6 +308,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
     component apiRest "WorkshopsBC" "Workshops BC Component Diagram" {
         include "element.tag==WorkshopsBC"
         include database SunarpDatabase SunatDatabase
+        
         autoLayout tb
         title "Workshops BC Component Diagram"
     }
@@ -313,7 +320,7 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
         title "IAM BC Component Diagram"
     }
 
-    component apiRest "NotificationBC" "Notification BC Component Diagram" {
+    component apiRest "NotificationSBC" "Notification BC Component Diagram" {
         include "element.tag==NotificationBC"
         include database EmailSystem
         autoLayout tb
@@ -400,6 +407,12 @@ workspace "Software Design & Patterns - C4 Model - MecanoCraft" "Vehicle Monitor
             background "#facc2e"
             color "#000000"
         }
+        element "Connector" {
+            background "#a2d2ff"
+            color "#000000"
+            shape "RoundedBox"
+        }
+
     }
 
     theme default

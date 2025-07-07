@@ -1,0 +1,19 @@
+@startuml AppointmentState
+
+actor Client as VehicleOwner
+
+participant "Workshops" as Workshops
+participant "Appointments" as Appointments
+participant "Notifications" as Notifications
+
+VehicleOwner -> Workshops : listAvailableServices()
+Workshops --> VehicleOwner : List<IService>
+
+VehicleOwner -> Appointments : new(clientId,\nserviceId,\nworkshopId,\ndate,\nassignedWorkerId)
+Appointments -> Appointments : getDetails()
+Appointments -> Notifications : send()
+
+Notifications --> Appointments : NotificationSent
+Appointments --> VehicleOwner : AppointmentId
+
+@enduml

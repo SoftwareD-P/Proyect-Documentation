@@ -1,8 +1,8 @@
-@startuml Workshop BC Aggregate
+@startuml Workshops BC Aggregate
 
-package "Workshop Aggregate" {
+package "Workshops Aggregate" {
 
-    class Workshop <<AggregateRoot>> {
+    class Workshops <<AggregateRoot>> {
         - id: UUID
         - name: String
         - ruc: RucNumber
@@ -126,12 +126,12 @@ package "Workshop Aggregate" {
         + getPrice(): Money
     }
 
-    Workshop *-- Address
-    Workshop *-- ContactInfo
-    Workshop *-- WeeklySchedule
-    Workshop *-- Promotion
-    Workshop *-- Statistics
-    Workshop *-- IService
+    Workshops *-- Address
+    Workshops *-- ContactInfo
+    Workshops *-- WeeklySchedule
+    Workshops *-- Promotion
+    Workshops *-- Statistics
+    Workshops *-- IService
     ServicePackage -- IService
 
     IService <|.. RepairService

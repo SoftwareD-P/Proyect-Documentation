@@ -1,0 +1,62 @@
+@startuml Flujo General
+
+|Dueño de Vehículo|
+start
+:Registrar cuenta;
+:Ingresa placa del vehículo;
+
+|Sistema|
+:Consultar base de datos vehicular;
+if (Placa válida?) then (Sí)
+  :Autocompletar datos del vehículo;
+else (No)
+  |Sistema|
+  :Mostrar mensaje de error y permitir ingreso manual;
+endif
+
+|Dueño de Vehículo|
+:Completar o editar datos;
+
+|Sistema|
+:Enviar correo de validación;
+
+|Dueño de Vehículo|
+:Validar correo;
+:Iniciar sesión;
+
+:Buscar taller;
+:Buscar servicios disponibles;
+:Ver disponibilidad y agendar Cita;
+:Confirmar fecha y hora;
+
+|Taller|
+:Recibir notificación de nueva cita;
+
+|Sistema|
+:Enviar confirmación al usuario;
+
+|Dueño de Vehículo|
+:Recibir confirmación de cita;
+:Recibir recordatorio de cita;
+:Asistir al taller;
+:Entregar vehículo;
+
+|Taller|
+:Seguimiento del vehículo;
+partition "Estados del vehículo" {
+  :Recibido;
+  :En revisión;
+  :En reparación;
+  :Listo para entrega;
+}
+
+|Sistema|
+:Notificar al cliente por cambios de estado;
+
+|Dueño de Vehículo|
+:Ver estado del vehículo;
+:Recibir notificación de finalización de servicio;
+:Calificar el servicio;
+stop
+
+@enduml
