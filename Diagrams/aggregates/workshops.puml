@@ -1,8 +1,8 @@
-@startuml Workshops BC Aggregate
+@startuml Workshop BC Aggregate
 
-package "Workshops Aggregate" {
+package "Workshop Aggregate" {
 
-    class Workshops <<AggregateRoot>> {
+    class Workshop <<AggregateRoot>> {
         - id: UUID
         - name: String
         - ruc: RucNumber
@@ -36,7 +36,11 @@ package "Workshops Aggregate" {
         + getEmail(): String
         + getPhone(): String
     }
-
+    class RucNumber <<ValueObject>> {
+        - value: String
+        --
+        + isValid(): boolean
+    }
     class WeeklySchedule <<ValueObject>> {
         - openingTime: LocalTime
         - closingTime: LocalTime
@@ -126,12 +130,13 @@ package "Workshops Aggregate" {
         + getPrice(): Money
     }
 
-    Workshops *-- Address
-    Workshops *-- ContactInfo
-    Workshops *-- WeeklySchedule
-    Workshops *-- Promotion
-    Workshops *-- Statistics
-    Workshops *-- IService
+    Workshop *-- Address
+    Workshop *-- ContactInfo
+    Workshop *-- RucNumber
+    Workshop *-- WeeklySchedule
+    Workshop *-- Promotion
+    Workshop *-- Statistics
+    Workshop *-- IService
     ServicePackage -- IService
 
     IService <|.. RepairService

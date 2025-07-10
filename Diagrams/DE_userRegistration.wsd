@@ -1,24 +1,29 @@
-@startuml Estado de Registro del Usuario
-[*] --> InicioRegistro
+@startuml RegistroUsuario
+actor Usuario
 
-InicioRegistro --> ValidandoDatos : Datos ingresados
-ValidandoDatos --> ConsultandoBaseVehicular : Usuario usa placa (cliente)
-ValidandoDatos --> ConsultandoRUC : Usuario es taller
+Usuario -> User : new(username, password, email)
+activate User
+User -> UserId : generate()
+UserId --> User : id
+User -> EncryptedPassword : hash(password)
+EncryptedPassword --> User : hashedPassword
+deactivate User
 
-ConsultandoBaseVehicular --> Autocompletado : Placa válida
-ConsultandoBaseVehicular --> RegistroManual : Placa no válida
+Usuario -> Authenticator : setStrategy(LocalAuthenticator)
+User -> Authenticator : authenticate(username, password)
+Authenticator --> User : boolean
 
-ConsultandoRUC --> Validado : RUC válido
-ConsultandoRUC --> RegistroManual : RUC inválido
+User -> Notifications : send()
+activate Notifications
+Notifications -> NotificationFactory : createNotification()
+NotificationFactory -> EmailNotification : send(message)
+EmailNotification --> NotificationFactory : enviado
+Notifications --> User : email enviado
+deactivate Notifications
 
-Autocompletado --> EdicionOpcional
-RegistroManual --> EdicionOpcional
-Validado --> EdicionOpcional
-
-EdicionOpcional --> EsperandoConfirmacion : Envía correo
-EsperandoConfirmacion --> Confirmado : Usuario verifica email
-EsperandoConfirmacion --> [*] : No verifica
-
-Confirmado --> CuentaActiva
-CuentaActiva --> [*]
+Usuario -> Email : abrir y confirmar link
+activate User
+User -> User : verifyEmail()
+User --> Usuario : cuenta activada
+deactivate User
 @enduml

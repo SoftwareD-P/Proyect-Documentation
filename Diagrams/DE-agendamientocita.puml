@@ -1,0 +1,32 @@
+@startuml AgendamientoCita
+actor Cliente
+
+Cliente -> User : authenticate()
+User -> Authenticator : authenticate(username, password)
+Authenticator --> User : boolean
+User --> Cliente : acceso permitido
+
+Cliente -> Workshop : listAvailableServices()
+Workshop -> IService : displayInformation()
+IService --> Workshop : List<Servicio>
+Workshop --> Cliente : servicios disponibles
+
+Cliente -> Appointment : create(date, serviceId, workshopId)
+
+activate Appointment
+Appointment -> AppointmentDate : isFuture()
+AppointmentDate --> Appointment : boolean
+
+Appointment -> AppointmentState : getStatus()
+AppointmentState --> Appointment : "Pending"
+
+Appointment -> Workshop : acceptAppointment(appointmentId)
+Workshop --> Appointment : void
+
+Appointment -> Notification : send()
+Notification -> NotificationFactory : createNotification()
+NotificationFactory -> InAppNotification : send()
+InAppNotification --> Notification : confirmación enviada
+Notification --> Cliente : confirmación recibida
+deactivate Appointment
+@enduml

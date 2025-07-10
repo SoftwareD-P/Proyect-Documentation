@@ -1,8 +1,8 @@
-@startuml Appointments BC Aggregate
+@startuml Appointment BC Aggregate
 
-package "Appointments Aggregate" {
+package "Appointment Aggregate" {
 
-  class Appointments <<AggregateRoot>> {
+  class Appointment <<AggregateRoot>> {
     - id: AppointmentId
     - clientId: ClientId
     - serviceId: ServiceId
@@ -120,13 +120,13 @@ package "Appointments Aggregate" {
   class CompletedRepair <<ValueObject>> extends RepairOrderState
   class CancelledRepair <<ValueObject>> extends RepairOrderState
 
-  Appointments *-- AppointmentId
-  Appointments *-- AppointmentDate
-  Appointments *-- ClientId
-  Appointments *-- ServiceId
-  Appointments *-- WorkshopId
-  Appointments *-- WorkerId
-  Appointments *-- AppointmentState
+  Appointment *-- AppointmentId
+  Appointment *-- AppointmentDate
+  Appointment *-- ClientId
+  Appointment *-- ServiceId
+  Appointment *-- WorkshopId
+  Appointment *-- WorkerId
+  Appointment *-- AppointmentState
 
   RepairOrder *-- RepairOrderId
   RepairOrder *-- AppointmentId

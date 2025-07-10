@@ -1,14 +1,24 @@
 @startuml Monitoring BC Aggregate
 
-package "Vehicle Aggregate" {
+package "Monitoring Aggregate" {
 
   class Vehicle <<AggregateRoot>> {
     - id: VehicleId
     - plateNumber: PlateNumber
     - currentState: VehicleState
+    - vehicleOwner: VehicleOwner
     --
     + updateState(newState: VehicleState): void
     + getCurrentState(): String
+  }
+
+  class VehicleOwner <<Entity>> {
+    - vehicles: List<Vehicle>
+    --
+    + getVehicles(): List<Vehicle>
+    + addVehicle(vehicle: Vehicle): void
+    + removeVehicle(vehicle: Vehicle): void
+    + getVehicleByPlate(plate: String): Vehicle
   }
 
   class VehicleId <<ValueObject>> {
@@ -58,6 +68,7 @@ package "Vehicle Aggregate" {
   Vehicle *-- VehicleId
   Vehicle *-- PlateNumber
   Vehicle *-- VehicleState
+  Vehicle -- VehicleOwner
 
 }
 @enduml

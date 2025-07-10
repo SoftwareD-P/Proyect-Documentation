@@ -1,6 +1,6 @@
-@startuml Payments BC Aggregate
+@startuml Payment BC Aggregate
 
-package "Payments Aggregate" {
+package "Payment Aggregate" {
 
   class Payment <<AggregateRoot>> {
     - id: PaymentId

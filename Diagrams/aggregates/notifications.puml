@@ -1,7 +1,7 @@
-@startuml Notifications BC Aggregate
+@startuml Notification BC Aggregate
 
-package "Notifications Aggregate" {
-  abstract class Notifications <<AggregateRoot>> {
+package "Notification Aggregate" {
+  abstract class Notification <<AggregateRoot>> {
     - id: NotificationId
     - message: NotificationMessage
     - date: NotificationDate
@@ -10,11 +10,12 @@ package "Notifications Aggregate" {
     + send(): void
   }
 
-  class InAppNotification <<Entity>> extends Notifications
-  class EmailNotification <<Entity>> extends Notifications {
+  class InAppNotification <<Entity>> extends Notification {
+  }
+  class EmailNotification <<Entity>> extends Notification {
     - email: EmailAddress
   }
-  class SMSNotification <<Entity>> extends Notifications {
+  class SMSNotification <<Entity>> extends Notification {
     - phoneNumber: PhoneNumber
   }
 
@@ -42,10 +43,10 @@ package "Notifications Aggregate" {
     - value: String
   }
 
-  Notifications *-- NotificationId
-  Notifications *-- NotificationMessage
-  Notifications *-- NotificationDate
-  Notifications *-- "*" UserId
+  Notification *-- NotificationId
+  Notification *-- NotificationMessage
+  Notification *-- NotificationDate
+  Notification *-- "*" UserId
   EmailNotification *-- EmailAddress
   SMSNotification *-- PhoneNumber
 }
